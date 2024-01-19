@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from flask import abort, flash, redirect, render_template, Response
 
 from yacut import app
@@ -10,7 +12,7 @@ from yacut.validators import (short_link_chars_validator,
                               url_exists_validator)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=('GET', 'POST'))
 def index_view() -> Response:
     """View-функция для отображения главной страницы."""
     form = URLForm()
@@ -82,4 +84,4 @@ def redirect_to_url(short_link: str) -> Response:
     url_map_object = URLMap.query.filter_by(short=short_link).first()
     if url_map_object:
         return redirect(url_map_object.original)
-    abort(404)
+    abort(HTTPStatus.NOT_FOUND)

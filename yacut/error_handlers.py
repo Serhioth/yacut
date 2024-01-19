@@ -8,7 +8,7 @@ from yacut import app
 
 class InvalidAPIUsage(Exception):
     """Класс для обработки ошибок в API."""
-    status_code = 400
+    status_code = HTTPStatus.BAD_REQUEST
 
     def __init__(
         self, message: str, status_code: int = None

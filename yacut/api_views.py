@@ -1,6 +1,7 @@
 from http import HTTPStatus
+from typing import Tuple
 
-from flask import jsonify, request
+from flask import jsonify, request, Response
 
 from yacut import app
 from yacut.error_handlers import InvalidAPIUsage
@@ -15,8 +16,8 @@ from yacut.validators import (request_data_is_empty_validator,
 from yacut.views import generate_short_link
 
 
-@app.route('/api/id/<string:short_link>/', methods=['GET'])
-def get_url(short_link: str) -> jsonify:
+@app.route('/api/id/<string:short_link>/', methods=('GET',))
+def get_url(short_link: str) -> Tuple[Response, int]:
     """Возвращает полную ссылку, по указанному custom_id."""
     if not short_link_exists_validator(short_link):
         raise InvalidAPIUsage('Указанный id не найден', HTTPStatus.NOT_FOUND)
@@ -25,8 +26,8 @@ def get_url(short_link: str) -> jsonify:
     return jsonify({'url': short_link_object.original}), HTTPStatus.OK
 
 
-@app.route('/api/id/', methods=['POST'])
-def create_short_link() -> jsonify:
+@app.route('/api/id/', methods=('POST',))
+def create_short_link() -> Tuple[Response, int]:
     """создаёт короткую ссылку для указанного URL."""
     data = request.get_json()
 
